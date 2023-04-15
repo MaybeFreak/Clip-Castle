@@ -6,19 +6,40 @@ import { logEvent } from "firebase/analytics";
 
 function Register() {
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(null);
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
 
   const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
+    setEmailError(null);
+    setPasswordError(null);
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         logEvent(analytics, "loggen_in", user);
       })
-      .catch((error) => {
-        console.error(`${error.code} \n ${error.message}`);
+      .catch((e) => {
+        const error = e.code.split("/")[1];
+        switch (error) {
+          case "invalid-email":
+            setEmailError("Invalid Email");
+            break;
+          case "email-already-in-use":
+            setEmailError("Email is already taken");
+            break;
+          case "missing-password":
+            setPasswordError("Please enter a password");
+            break;
+          case "weak-password":
+            setPasswordError("Password should be at least 6 characters");
+            break;
+          default:
+            console.error(`${error}`);
+        }
         return true;
       })
       .then((error) => {
@@ -30,18 +51,24 @@ function Register() {
     <>
       <div>This is the register page</div>
       <form>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {emailError !== null && <p>{emailError}</p>}
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {passwordError !== null && <p>{passwordError}</p>}
+        </div>
         <button onClick={handleRegister}>Register</button>
       </form>
       <button onClick={() => navigate("/login")}>Login</button>
