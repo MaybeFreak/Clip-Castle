@@ -1,41 +1,20 @@
 import React, { useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import './ClipsStyle.css';
-
-gsap.registerPlugin(ScrollTrigger);
+import AOS from 'aos';
 
 const Clips = () => {
-	const containerRef = useRef(null);
-
-	useEffect(() => {
-		const container = containerRef.current;
-
-		gsap.from(container.children, {
-			opacity: 0,
-			y: 50,
-			stagger: 0.2,
-			duration: 0.5,
-			scrollTrigger: {
-				trigger: container,
-				start: 'top 80%',
-			},
-		});
-	}, []);
-
 	return (
 		<>
 			<h1>Clips</h1>
-			<div
-				className='clipsContainer'
-				ref={containerRef}>
+			<div className='clipsContainer'>
 				{[...Array(20)].map((item, i) => (
 					<div
 						key={i}
+						data-aos='fade-up'
 						className='clipContainer'>
 						<h2 style={{ marginTop: 0 }}>Clip Title {i}</h2>
 						<video
-							src={`https://example.com/clips/${i}.mp4`}
+							// src={`https://example.com/clips/${i}.mp4`}
 							style={{
 								width: '100%',
 								objectFit: 'cover',
