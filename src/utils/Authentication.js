@@ -1,8 +1,9 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
-import { analytics, auth } from "../firebase";
+import { analytics, auth, googleAuth } from "../firebase";
 import { logEvent } from "firebase/analytics";
 
 export function EmailRegister(email, password) {
@@ -31,7 +32,7 @@ export function EmailRegister(email, password) {
     });
 }
 
-export async function EmailLogin(email, password) {
+export function EmailLogin(email, password) {
   return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -50,5 +51,17 @@ export async function EmailLogin(email, password) {
         default:
           return error;
       }
+    });
+}
+
+export function GoogleSignIn() {
+  return signInWithPopup(auth, googleAuth)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      logEvent(analytics, "logged_in", user);
+      return true;
+    })
+    .catch((error) => {
+      return error;
     });
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { EmailLogin } from "../../utils/Authentication";
+import { EmailLogin, GoogleSignIn } from "../../utils/Authentication";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -31,6 +31,18 @@ function Login() {
     });
   };
 
+  const handleGoogleLogin = (e) => {
+    e.preventDefault();
+
+    GoogleSignIn().then((res) => {
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        navigate("/");
+      }
+    });
+  };
+
   return (
     <>
       <div>This is the login page</div>
@@ -54,6 +66,7 @@ function Login() {
           {passwordError !== null && <p>{passwordError}</p>}
         </div>
         <button onClick={handleLogin}>Login</button>
+        <button onClick={handleGoogleLogin}>Login with Google</button>
       </form>
       <button onClick={() => navigate("/register")}>Register</button>
     </>
