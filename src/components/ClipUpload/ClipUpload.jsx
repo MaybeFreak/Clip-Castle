@@ -52,6 +52,7 @@ const ClipUpload = () => {
 				Video: videoURL,
 				Tags: selectedTags,
 				Categories: selectedCats,
+				timeCreated: new Date(),
 			};
 
 			uploadClip(clipData);
