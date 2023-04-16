@@ -6,6 +6,7 @@ import './App.css';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import Home from './components/Home/Home';
+import ClipUpload from './components/ClipUpload/ClipUpload';
 
 function App() {
 	// Initialise the ANIMATE ON SCROLL library
@@ -27,6 +28,14 @@ function App() {
 				<Route
 					index
 					element={<Home />}
+				/>
+				<Route
+					index
+					element={<Clips />}
+				/>
+				<Route
+					path='/clip-upload'
+					element={<ClipUpload />}
 				/>
 			</Routes>
 		</div>
