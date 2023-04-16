@@ -8,6 +8,7 @@ import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import ClipUpload from "./components/ClipUpload/ClipUpload";
 import Header from "./components/Header/Header";
+import Profile from "./components/Profile/Profile";
 
 function App() {
   // Initialise the ANIMATE ON SCROLL library
@@ -41,6 +42,14 @@ function App() {
           element={
             <Header>
               <ClipUpload />
+            </Header>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Header>
+              <Profile />
             </Header>
           }
         />
