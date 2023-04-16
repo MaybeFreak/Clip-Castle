@@ -36,7 +36,14 @@ function App() {
             </Header>
           }
         />
-        <Route path="/clips/upload" element={<ClipUpload />} />
+        <Route
+          path="/clips/upload"
+          element={
+            <Header>
+              <ClipUpload />
+            </Header>
+          }
+        />
       </Routes>
     </div>
   );

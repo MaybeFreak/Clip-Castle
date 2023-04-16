@@ -34,6 +34,7 @@ function Header({ children }) {
         </NavLink>
         <nav>
           <NavLink to={"/clips"}>clips</NavLink>
+          <NavLink to={"/clips/upload"}>Upload</NavLink>
           {isLoggedIn ? (
             <>
               <NavLink to={"/profile"}>Profile</NavLink>
