@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { analytics, auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { logEvent } from "firebase/analytics";
 import { useNavigate } from "react-router-dom";
+import { EmailLogin } from "../../utils/Authentication";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -18,31 +16,19 @@ function Login() {
     setEmailError(null);
     setPasswordError(null);
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        logEvent(analytics, "logged_in", user);
-      })
-      .catch((e) => {
-        const error = e.code.split("/")[1];
-        switch (error) {
-          case "invalid-email":
-            setEmailError("Invalid Email");
-            break;
-          case "missing-password":
-            setPasswordError("Please enter a password");
-            break;
-          case "wrong-password":
-            setPasswordError("Incorrect Password");
-            break;
-          default:
-            console.error(`${error}`);
+    EmailLogin(email, password).then((res) => {
+      if (res.error) {
+        if (res.error.email) {
+          setEmailError(res.error.email);
+        } else if (res.error.password) {
+          setPasswordError(res.error.password);
+        } else {
+          console.error(res.error);
         }
-        return true;
-      })
-      .then((error) => {
-        if (!error) navigate("/");
-      });
+      } else {
+        navigate("/");
+      }
+    });
   };
 
   return (

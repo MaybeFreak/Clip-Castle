@@ -1,8 +1,6 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { analytics, auth } from "../../firebase";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logEvent } from "firebase/analytics";
+import { EmailRegister } from "../../utils/Authentication";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -17,34 +15,19 @@ function Register() {
     setEmailError(null);
     setPasswordError(null);
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        logEvent(analytics, "loggen_in", user);
-      })
-      .catch((e) => {
-        const error = e.code.split("/")[1];
-        switch (error) {
-          case "invalid-email":
-            setEmailError("Invalid Email");
-            break;
-          case "email-already-in-use":
-            setEmailError("Email is already taken");
-            break;
-          case "missing-password":
-            setPasswordError("Please enter a password");
-            break;
-          case "weak-password":
-            setPasswordError("Password should be at least 6 characters");
-            break;
-          default:
-            console.error(`${error}`);
+    EmailRegister(email, password).then((res) => {
+      if (res.error) {
+        if (res.error.email) {
+          setEmailError(res.error.email);
+        } else if (res.error.password) {
+          setPasswordError(res.error.password);
+        } else {
+          console.error(res.error);
         }
-        return true;
-      })
-      .then((error) => {
-        if (!error) navigate("/");
-      });
+      } else {
+        navigate("/");
+      }
+    });
   };
 
   return (
