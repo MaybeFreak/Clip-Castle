@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import './ClipsStyle.css';
-import AOS from 'aos';
 
 const Clips = () => {
 	return (
