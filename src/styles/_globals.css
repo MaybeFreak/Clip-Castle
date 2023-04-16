@@ -1,0 +1,21 @@
+:root {
+  /* Color Vars */
+  --color-white: #eef1ef;
+  --color-white-25: #eef1ef40;
+  --color-red: #dc1a21;
+  --color-black: #242325;
+
+  font-family: Harman-Sans, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--color-white);
+  background-color: var(--color-black);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
