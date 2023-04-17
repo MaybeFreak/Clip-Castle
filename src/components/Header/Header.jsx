@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "@firebase/auth";
 import { auth } from "../../firebase";
@@ -8,6 +8,7 @@ function Header({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -18,7 +19,7 @@ function Header({ children }) {
   }, [auth]);
 
   const handleSignOut = () => {
-    signOut(auth).then(() => navigate("/login"));
+    signOut(auth).then(() => navigate("/"));
   };
 
   return (
@@ -42,7 +43,9 @@ function Header({ children }) {
             </>
           ) : (
             <>
-              <NavLink to={"/login"}>Login</NavLink>
+              <NavLink to={"/login"} state={{ from: location }}>
+                Login
+              </NavLink>
               <NavLink to={"/register"}>Sign up</NavLink>
             </>
           )}

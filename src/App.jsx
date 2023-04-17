@@ -9,6 +9,7 @@ import Home from "./components/Home/Home";
 import ClipUpload from "./components/ClipUpload/ClipUpload";
 import Header from "./components/Header/Header";
 import Profile from "./components/Profile/Profile";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
   // Initialise the ANIMATE ON SCROLL library
@@ -40,9 +41,11 @@ function App() {
         <Route
           path="/clips/upload"
           element={
-            <Header>
-              <ClipUpload />
-            </Header>
+            <ProtectedRoute>
+              <Header>
+                <ClipUpload />
+              </Header>
+            </ProtectedRoute>
           }
         />
         <Route
