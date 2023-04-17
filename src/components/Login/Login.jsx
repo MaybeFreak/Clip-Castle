@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { EmailLogin, GoogleSignIn } from "../../utils/Authentication";
 
 function Login() {
@@ -10,6 +10,8 @@ function Login() {
   const [passwordError, setPasswordError] = useState(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  let from = location.state?.from?.pathname;
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ function Login() {
           console.error(res.error);
         }
       } else {
-        navigate("/");
+        navigate(from);
       }
     });
   };
@@ -38,7 +40,7 @@ function Login() {
       if (res.error) {
         console.error(res.error);
       } else {
-        navigate("/");
+        navigate(from);
       }
     });
   };
