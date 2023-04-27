@@ -1,0 +1,91 @@
+.clipCard {
+  max-width: 400px;
+
+  border: solid 5px var(--color-red);
+  border-radius: 8px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.clipCard > .videoContainer {
+  height: 225px;
+  max-width: 400px;
+}
+
+.clipCard > .videoContainer > video {
+  width: 100%;
+  height: 100%;
+
+  border-radius: 4px 4px 0 0;
+  object-fit: cover;
+}
+
+.clipCard > .clipInfo {
+  padding: 0rem 1rem;
+}
+
+.clipInfo > .whenWho {
+  display: flex;
+  gap: 6px;
+
+  font-size: 0.8rem;
+}
+
+.clipInfo > .whenWho > a {
+  text-decoration: none;
+  color: var(--color-white);
+
+  transition: all 0.3s;
+}
+
+.clipInfo > .whenWho > a:hover {
+  color: red;
+}
+
+.clipCard > .clipInfo > .clipTags {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+
+  padding: 0.5rem 0;
+
+  list-style: none;
+}
+
+.clipCard > .clipInfo > .clipTags > .tag {
+  cursor: pointer;
+  padding: 0.8rem 0.8rem;
+  font-size: 0.8rem;
+
+  transition: all 0.3s;
+}
+
+.clipCard > .clipInfo > .clipTags > .tag:hover {
+  color: var(--color-red);
+}
+
+.clipCard > .clipCardButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.clipCard > .clipCardButtons > p {
+  cursor: pointer;
+
+  width: 100%;
+  padding: 0.2rem 0;
+  text-align: center;
+
+  border-top: solid 2px var(--color-red);
+  border-left: solid 2px var(--color-red);
+
+  transition: all 0.3s;
+}
+
+.clipCard > .clipCardButtons > p:hover {
+  background-color: var(--color-red);
+}
+
+.clipCard > .clipCardButtons > p:first-of-type {
+  border-left: none;
+}
