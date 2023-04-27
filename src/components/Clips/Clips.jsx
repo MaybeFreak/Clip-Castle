@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { analytics, db } from "../../firebase"; // Import db (Firestore) here
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { logEvent } from "firebase/analytics";
-import Clip from "../Clip/Clip";
 import "./ClipsStyle.css";
+import ClipCard from "../ClipCard/ClipCard";
 
 const Clips = () => {
   const [clipData, setClipData] = useState(false);
@@ -28,9 +28,10 @@ const Clips = () => {
 
   return (
     <>
-      <h1>Clips</h1>
+      <h1>Newest Clips</h1>
       <div className="clipsContainer">
-        {clipData && clipData.map((clip, i) => <Clip clip={clip} key={i} />)}
+        {clipData &&
+          clipData.map((clip, i) => <ClipCard clip={clip} key={i} />)}
       </div>
     </>
   );

@@ -1,8 +1,8 @@
 import { collection, getDocs, limit, query, where } from "@firebase/firestore";
 import { useEffect, useState } from "react";
-import Clip from "../Clip/Clip";
 import { auth, db } from "../../firebase";
 import { onAuthStateChanged } from "@firebase/auth";
+import ClipCard from "../ClipCard/ClipCard";
 
 function Profile() {
   const [clips, setClips] = useState(false);
@@ -33,7 +33,9 @@ function Profile() {
     <main>
       <div>Your Profile</div>
       <h2>Your Clips</h2>
-      <div>{clips && clips.map((clip, i) => <Clip clip={clip} key={i} />)}</div>
+      <div>
+        {clips && clips.map((clip, i) => <ClipCard key={i} clip={clip} />)}
+      </div>
     </main>
   );
 }
