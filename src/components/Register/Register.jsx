@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { EmailRegister, GoogleSignIn } from "../../utils/Authentication";
 
 function Register() {
@@ -25,7 +25,7 @@ function Register() {
           console.error(res.error);
         }
       } else {
-        navigate("/");
+        navigate("/profileSetup");
       }
     });
   };

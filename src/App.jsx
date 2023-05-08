@@ -7,9 +7,9 @@ import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import ClipUpload from "./components/ClipUpload/ClipUpload";
-import Header from "./components/Header/Header";
 import Profile from "./components/Profile/Profile";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import ProfileSetup from "./components/ProfileSetup/ProfileSetup";
 
 function App() {
   // Initialise the ANIMATE ON SCROLL library
@@ -23,37 +23,43 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
+          path="/profileSetup"
+          element={
+            <ProtectedRoute>
+              <ProfileSetup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           index
           element={
-            <Header>
+            <ProtectedRoute>
               <Home />
-            </Header>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/clips"
           element={
-            <Header>
+            <ProtectedRoute>
               <Clips />
-            </Header>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/clips/upload"
           element={
             <ProtectedRoute>
-              <Header>
-                <ClipUpload />
-              </Header>
+              <ClipUpload />
             </ProtectedRoute>
           }
         />
         <Route
           path="/profile"
           element={
-            <Header>
+            <ProtectedRoute>
               <Profile />
-            </Header>
+            </ProtectedRoute>
           }
         />
       </Routes>
