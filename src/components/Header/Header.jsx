@@ -19,7 +19,7 @@ function Header({ children }) {
   }, [auth]);
 
   const handleSignOut = () => {
-    signOut(auth).then(() => navigate("/"));
+    signOut(auth).then(() => navigate("/login", { state: { from: location } }));
   };
 
   return (
