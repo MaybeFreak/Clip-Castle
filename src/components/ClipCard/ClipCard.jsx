@@ -1,7 +1,22 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import "./ClipCard.css";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 function ClipCard({ clip }) {
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const fetchUserInfo = async () => {
+    const q = doc(db, "users", clip.data.Owner);
+    const querySnapshot = (await getDoc(q)).data();
+    setUserInfo(querySnapshot);
+  };
+
   const getTimeDifference = (timeCreated) => {
     const now = new Date();
     const noteTime = new Date(timeCreated.seconds * 1000);
@@ -43,7 +58,10 @@ function ClipCard({ clip }) {
       <div className="clipInfo">
         <h2>{clip.data.Title}</h2>
         <div className="whenWho">
-          <NavLink to={"/profile"}>UserName</NavLink>
+          {userInfo && <NavLink to={"/profile"}>{userInfo.username}</NavLink>}
+          {userInfo === undefined && (
+            <NavLink to={"/profile"}>{clip.data.Owner}</NavLink>
+          )}
           <p>•</p>
           <p className="timeago">{getTimeDifference(clip.data.timeCreated)}</p>
         </div>
