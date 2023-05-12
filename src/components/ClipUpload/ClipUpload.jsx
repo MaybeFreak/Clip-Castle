@@ -5,7 +5,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const ClipUpload = () => {
   const [videoFile, setVideoFile] = useState(null);
-  const [formData, setFormData] = useState({ title: "" });
+  const [formData, setFormData] = useState({ title: "", tags: [] });
   const [categories, setCategories] = useState(null);
 
   useEffect(() => {
@@ -24,6 +24,17 @@ const ClipUpload = () => {
       [key]: value,
     };
     setFormData(newFormData);
+  };
+
+  const AddTag = (e) => {
+    e.preventDefault();
+    const value = e.target.value.toLowerCase();
+    const newFormData = { ...formData };
+    if (!newFormData.tags.includes(value)) {
+      newFormData.tags.push(value);
+      setFormData(newFormData);
+    }
+    e.value = "";
   };
 
   const handleVideoChange = (e) => {
@@ -45,37 +56,43 @@ const ClipUpload = () => {
     }
   };
 
-  const handleUploadClip = async () => {
-    if (videoFile) {
-      const videoURL = await uploadVideo(videoFile);
-      const clipData = {
-        Owner: auth.currentUser.uid,
-        Title: "Test Clip",
-        Video: videoURL,
-        Tags: selectedTags,
-        Categories: selectedCats,
-        timeCreated: new Date(),
-      };
+  const handleSubmit = async (e) => {
+    console.log(formData);
+    e.preventDefault();
+    // const videoURL = await uploadVideo(videoFile);
+    // const clipData = {
+    //   Owner: auth.currentUser.uid,
+    //   Title: formData.title,
+    //   Video: videoURL,
+    //   // Tags: selectedTags,
+    //   Categories: formData.category,
+    //   timeCreated: new Date(),
+    // };
 
-      uploadClip(clipData);
-    } else {
-      console.log("No video file selected.");
-    }
+    // uploadClip(clipData);
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <input
         placeholder="Title"
         value={formData.title}
         onChange={(e) => handleFormChange("title", e.target.value)}
+        required
       />
-      <input type="file" accept="video/*" onChange={handleVideoChange} />
+      <input
+        type="file"
+        accept="video/*"
+        onChange={handleVideoChange}
+        required
+      />
       {categories ? (
-        <select name="categories" id="categories" defaultValue={"Other"}>
-          <option value="" disabled>
-            ---Choose Category---
-          </option>
+        <select
+          name="categories"
+          onChange={(e) => handleFormChange("category", e.target.value)}
+          required
+        >
+          <option value="">---Choose Category---</option>
           {categories.map((cat, i) => (
             <option key={i} value={cat}>
               {cat}
@@ -85,8 +102,19 @@ const ClipUpload = () => {
       ) : (
         <p>Loading...</p>
       )}
-      <button onClick={handleUploadClip}>UPLOAD CLIP</button>
-    </>
+      <ul>
+        {formData.tags.map((tag, i) => (
+          <li key={i}>#{tag}</li>
+        ))}
+      </ul>
+      <input
+        placeholder="#"
+        onKeyDown={(e) => {
+          e.key === "Enter" && AddTag(e);
+        }}
+      ></input>
+      <button>UPLOAD CLIP</button>
+    </form>
   );
 };
 
