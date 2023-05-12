@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { auth, db, storage } from "../../firebase.js";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const ClipUpload = () => {
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedCats, setSelectedCats] = useState([]);
   const [videoFile, setVideoFile] = useState(null);
   const [formData, setFormData] = useState({ title: "" });
+  const [categories, setCategories] = useState(null);
 
-  const tagOptions = ["Funny", "Epic", "Nice"];
-  const catOptions = ["CS:GO", "GTA", "People"];
+  useEffect(() => {
+    fetchCatergories();
+  }, []);
+
+  const fetchCatergories = async () => {
+    const q = doc(db, "clips", "categories");
+    const snap = (await getDoc(q)).data();
+    setCategories(snap.categories);
+  };
 
   const handleFormChange = (key, value) => {
     const newFormData = {
@@ -57,23 +63,6 @@ const ClipUpload = () => {
     }
   };
 
-  const handleTagChange = (event) => {
-    const value = event.target.value;
-    setSelectedTags((prevSelectedOptions) =>
-      prevSelectedOptions.includes(value)
-        ? prevSelectedOptions.filter((option) => option !== value)
-        : [...prevSelectedOptions, value]
-    );
-  };
-  const handleCatChange = (event) => {
-    const value = event.target.value;
-    setSelectedCats((prevSelectedOptions) =>
-      prevSelectedOptions.includes(value)
-        ? prevSelectedOptions.filter((option) => option !== value)
-        : [...prevSelectedOptions, value]
-    );
-  };
-
   return (
     <>
       <input
@@ -82,55 +71,20 @@ const ClipUpload = () => {
         onChange={(e) => handleFormChange("title", e.target.value)}
       />
       <input type="file" accept="video/*" onChange={handleVideoChange} />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: 20,
-          border: "1px solid white",
-          margin: 20,
-          gap: "1rem",
-        }}
-      >
-        {tagOptions.map((option) => (
-          <>
-            <label>
-              <input
-                type="checkbox"
-                value={option}
-                onChange={handleTagChange}
-                checked={selectedTags.includes(option)}
-              />
-              {option}
-            </label>
-          </>
-        ))}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: 20,
-          border: "1px solid white",
-          margin: 20,
-          gap: "1rem",
-        }}
-      >
-        {catOptions.map((option) => (
-          <>
-            <label>
-              <input
-                type="checkbox"
-                value={option}
-                onChange={handleCatChange}
-                checked={selectedCats.includes(option)}
-              />
-              {option}
-            </label>
-          </>
-        ))}
-      </div>
-      <p>Selected options: {selectedTags.join(", ")}</p>
+      {categories ? (
+        <select name="categories" id="categories" defaultValue={"Other"}>
+          <option value="" disabled>
+            ---Choose Category---
+          </option>
+          {categories.map((cat, i) => (
+            <option key={i} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <p>Loading...</p>
+      )}
       <button onClick={handleUploadClip}>UPLOAD CLIP</button>
     </>
   );
