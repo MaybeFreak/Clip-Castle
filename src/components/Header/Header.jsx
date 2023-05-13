@@ -28,7 +28,7 @@ function Header({ children }) {
         <NavLink id="headerLogo" to={"/"}>
           <img
             className="headerLogo"
-            src="src\assets\Clip-Castle-favicon.png"
+            src="\src\assets\Clip-Castle-favicon.png"
             alt="Clip-Castle"
           />
           <h1>Clip Castle</h1>

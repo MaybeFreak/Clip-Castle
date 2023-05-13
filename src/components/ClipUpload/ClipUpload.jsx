@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { auth, db, storage } from "../../firebase.js";
 import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import "./ClipUpload.css";
 
 const ClipUpload = () => {
   const [videoFile, setVideoFile] = useState(null);
@@ -34,11 +35,15 @@ const ClipUpload = () => {
       newFormData.tags.push(value);
       setFormData(newFormData);
     }
-    e.value = "";
+    e.target.value = "";
   };
 
-  const handleVideoChange = (e) => {
-    setVideoFile(e.target.files[0]);
+  const removeTag = (tag) => {
+    console.log("test");
+    const newFormData = { ...formData };
+    const filterdTags = formData.tags.filter((e) => e !== tag);
+    newFormData.tags = filterdTags;
+    setFormData(newFormData);
   };
 
   const uploadVideo = async (file) => {
@@ -64,7 +69,7 @@ const ClipUpload = () => {
     //   Owner: auth.currentUser.uid,
     //   Title: formData.title,
     //   Video: videoURL,
-    //   // Tags: selectedTags,
+    //   // Tags: formData.tags,
     //   Categories: formData.category,
     //   timeCreated: new Date(),
     // };
@@ -72,49 +77,74 @@ const ClipUpload = () => {
     // uploadClip(clipData);
   };
 
+  //TODO: https://www.codemzy.com/blog/react-drag-drop-file-upload
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        placeholder="Title"
-        value={formData.title}
-        onChange={(e) => handleFormChange("title", e.target.value)}
-        required
-      />
-      <input
-        type="file"
-        accept="video/*"
-        onChange={handleVideoChange}
-        required
-      />
-      {categories ? (
-        <select
-          name="categories"
-          onChange={(e) => handleFormChange("category", e.target.value)}
-          required
-        >
-          <option value="">---Choose Category---</option>
-          {categories.map((cat, i) => (
-            <option key={i} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <p>Loading...</p>
-      )}
-      <ul>
-        {formData.tags.map((tag, i) => (
-          <li key={i}>#{tag}</li>
-        ))}
-      </ul>
-      <input
-        placeholder="#"
-        onKeyDown={(e) => {
-          e.key === "Enter" && AddTag(e);
-        }}
-      ></input>
-      <button>UPLOAD CLIP</button>
-    </form>
+    <main className="Upload">
+      <div className="UploadCard">
+        <form onSubmit={handleSubmit}>
+          {videoFile && <video controls src={URL.createObjectURL(videoFile)} />}
+          <input
+            type="file"
+            accept="video/*"
+            onChange={(e) => setVideoFile(e.target.files[0])}
+            required
+          />
+          <div className="uploadInfo">
+            <div>
+              <label htmlFor="title">Title</label>
+              <input
+                placeholder="Title"
+                name="title"
+                value={formData.title}
+                onChange={(e) => handleFormChange("title", e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="categories">Category</label>
+              {categories ? (
+                <select
+                  name="categories"
+                  onChange={(e) => handleFormChange("category", e.target.value)}
+                  required
+                >
+                  <option value="">---Choose Category---</option>
+                  {categories.map((cat, i) => (
+                    <option key={i} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <p>Loading...</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="tags">Tags</label>
+              <ul className="tags">
+                {formData.tags.map((tag, i) => (
+                  <li key={i} className="tag">
+                    <p>#{tag}</p>
+                    <button type="button" onClick={(e) => removeTag(tag)}>
+                      x
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <input
+                placeholder="#Tags"
+                name="tags"
+                onKeyDown={(e) => {
+                  e.key === "Enter" && AddTag(e);
+                }}
+              />
+            </div>
+          </div>
+          <button type="submit">UPLOAD CLIP</button>
+        </form>
+      </div>
+    </main>
   );
 };
 

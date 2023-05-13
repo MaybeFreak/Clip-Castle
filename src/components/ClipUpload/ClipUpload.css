@@ -1,0 +1,73 @@
+main.Upload {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+  padding: 3rem;
+}
+
+.UploadCard {
+  width: 800px;
+  border: solid 2px red;
+  border-radius: 8px;
+}
+
+.UploadCard form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.UploadCard video {
+  height: 450px;
+  max-width: 800px;
+
+  border-radius: 4px 4px 0 0;
+  object-fit: contain;
+}
+
+.UploadCard .uploadInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding: 1rem;
+}
+
+.UploadCard .uploadInfo > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.UploadCard .uploadInfo input,
+.UploadCard .uploadInfo select {
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.UploadCard .tags {
+  list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.UploadCard .tags .tag {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.UploadCard .tags .tag button {
+  background: none;
+  padding: 0;
+  padding-left: 8px;
+}
+
+.UploadCard .tags input {
+  height: 32px;
+  border: none;
+  border-radius: 5px;
+}
