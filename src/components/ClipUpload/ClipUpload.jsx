@@ -3,12 +3,16 @@ import { auth, db, storage } from "../../firebase.js";
 import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "./ClipUpload.css";
+import { useNavigate } from "react-router-dom";
 
 const ClipUpload = () => {
   const [videoFile, setVideoFile] = useState(null);
   const [formData, setFormData] = useState({ title: "", tags: [] });
   const [categories, setCategories] = useState(null);
   const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCatergories();
@@ -59,12 +63,16 @@ const ClipUpload = () => {
   const uploadClip = async (clip) => {
     try {
       const docRef = await addDoc(collection(db, "clips"), clip);
+
+      navigate("/");
     } catch (error) {
       console.error("Error uploading clip:", error);
+      setUploading(false);
     }
   };
 
   const handleSubmit = async (e) => {
+    setUploading(true);
     e.preventDefault();
     const videoURL = await uploadVideo(videoFile);
     const clipData = {
@@ -186,7 +194,9 @@ const ClipUpload = () => {
               />
             </div>
           </div>
-          <button type="submit">UPLOAD CLIP</button>
+          <button type="submit" disabled={uploading}>
+            UPLOAD CLIP
+          </button>
         </form>
       </div>
     </main>
