@@ -8,10 +8,15 @@ const ClipUpload = () => {
   const [videoFile, setVideoFile] = useState(null);
   const [formData, setFormData] = useState({ title: "", tags: [] });
   const [categories, setCategories] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
 
   useEffect(() => {
     fetchCatergories();
   }, []);
+
+  useEffect(() => {
+    if (dragActive) console.log("drag");
+  });
 
   const fetchCatergories = async () => {
     const q = doc(db, "clips", "categories");
@@ -77,19 +82,62 @@ const ClipUpload = () => {
     // uploadClip(clipData);
   };
 
-  //TODO: https://www.codemzy.com/blog/react-drag-drop-file-upload
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setVideoFile(e.dataTransfer.files[0]);
+    }
+  };
 
   return (
     <main className="Upload">
       <div className="UploadCard">
         <form onSubmit={handleSubmit}>
-          {videoFile && <video controls src={URL.createObjectURL(videoFile)} />}
-          <input
-            type="file"
-            accept="video/*"
-            onChange={(e) => setVideoFile(e.target.files[0])}
-            required
-          />
+          {videoFile ? (
+            <video controls src={URL.createObjectURL(videoFile)} />
+          ) : (
+            <>
+              <input
+                type="file"
+                className="hidden"
+                name="videoInput"
+                accept="video/*"
+                onChange={(e) => setVideoFile(e.target.files[0])}
+                required
+              />
+              <label
+                htmlFor="videoInput"
+                className="videoInput"
+                onDragEnter={handleDrag}
+              >
+                <div>
+                  <p>Drag and drop your file here or</p>
+                  <button className="uploadButton">Upload a file</button>
+                </div>
+              </label>
+              {dragActive && (
+                <div
+                  id="dragOverlay"
+                  onDragEnter={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDragOver={handleDrag}
+                  onDrop={handleDrop}
+                ></div>
+              )}
+            </>
+          )}
           <div className="uploadInfo">
             <div>
               <label htmlFor="title">Title</label>
