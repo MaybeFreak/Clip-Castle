@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth, db, storage } from "../../firebase.js";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import "./ClipUpload.css";
+import { useNavigate } from "react-router-dom";
 
 const ClipUpload = () => {
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedCats, setSelectedCats] = useState([]);
   const [videoFile, setVideoFile] = useState(null);
-  const [formData, setFormData] = useState({ title: "" });
+  const [formData, setFormData] = useState({ title: "", tags: [] });
+  const [categories, setCategories] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-  const tagOptions = ["Funny", "Epic", "Nice"];
-  const catOptions = ["CS:GO", "GTA", "People"];
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCatergories();
+  }, []);
+
+  useEffect(() => {
+    if (dragActive) console.log("drag");
+  });
+
+  const fetchCatergories = async () => {
+    const q = doc(db, "clips", "categories");
+    const snap = (await getDoc(q)).data();
+    setCategories(snap.categories);
+  };
 
   const handleFormChange = (key, value) => {
     const newFormData = {
@@ -20,8 +36,22 @@ const ClipUpload = () => {
     setFormData(newFormData);
   };
 
-  const handleVideoChange = (e) => {
-    setVideoFile(e.target.files[0]);
+  const AddTag = (e) => {
+    e.preventDefault();
+    const value = e.target.value.toLowerCase();
+    const newFormData = { ...formData };
+    if (!newFormData.tags.includes(value)) {
+      newFormData.tags.push(value);
+      setFormData(newFormData);
+    }
+    e.target.value = "";
+  };
+
+  const removeTag = (tag) => {
+    const newFormData = { ...formData };
+    const filterdTags = formData.tags.filter((e) => e !== tag);
+    newFormData.tags = filterdTags;
+    setFormData(newFormData);
   };
 
   const uploadVideo = async (file) => {
@@ -33,106 +63,143 @@ const ClipUpload = () => {
   const uploadClip = async (clip) => {
     try {
       const docRef = await addDoc(collection(db, "clips"), clip);
-      console.log("Note uploaded with ID:", docRef.id);
+
+      navigate("/");
     } catch (error) {
-      console.error("Error uploading note:", error);
+      console.error("Error uploading clip:", error);
+      setUploading(false);
     }
   };
 
-  const handleUploadClip = async () => {
-    if (videoFile) {
-      const videoURL = await uploadVideo(videoFile);
-      const clipData = {
-        Owner: auth.currentUser.uid,
-        Title: "Test Clip",
-        Video: videoURL,
-        Tags: selectedTags,
-        Categories: selectedCats,
-        timeCreated: new Date(),
-      };
+  const handleSubmit = async (e) => {
+    setUploading(true);
+    e.preventDefault();
+    const videoURL = await uploadVideo(videoFile);
+    const clipData = {
+      Owner: auth.currentUser.uid,
+      Title: formData.title,
+      Video: videoURL,
+      Tags: formData.tags,
+      Categories: formData.category,
+      timeCreated: new Date(),
+    };
 
-      uploadClip(clipData);
-    } else {
-      console.log("No video file selected.");
+    uploadClip(clipData);
+  };
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
     }
   };
 
-  const handleTagChange = (event) => {
-    const value = event.target.value;
-    setSelectedTags((prevSelectedOptions) =>
-      prevSelectedOptions.includes(value)
-        ? prevSelectedOptions.filter((option) => option !== value)
-        : [...prevSelectedOptions, value]
-    );
-  };
-  const handleCatChange = (event) => {
-    const value = event.target.value;
-    setSelectedCats((prevSelectedOptions) =>
-      prevSelectedOptions.includes(value)
-        ? prevSelectedOptions.filter((option) => option !== value)
-        : [...prevSelectedOptions, value]
-    );
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setVideoFile(e.dataTransfer.files[0]);
+    }
   };
 
   return (
-    <>
-      <input
-        placeholder="Title"
-        value={formData.title}
-        onChange={(e) => handleFormChange("title", e.target.value)}
-      />
-      <input type="file" accept="video/*" onChange={handleVideoChange} />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: 20,
-          border: "1px solid white",
-          margin: 20,
-          gap: "1rem",
-        }}
-      >
-        {tagOptions.map((option) => (
-          <>
-            <label>
+    <main className="Upload">
+      <div className="UploadCard">
+        <form onSubmit={handleSubmit}>
+          {videoFile ? (
+            <video controls src={URL.createObjectURL(videoFile)} />
+          ) : (
+            <>
               <input
-                type="checkbox"
-                value={option}
-                onChange={handleTagChange}
-                checked={selectedTags.includes(option)}
+                type="file"
+                className="hidden"
+                name="videoInput"
+                accept="video/*"
+                onChange={(e) => setVideoFile(e.target.files[0])}
+                required
               />
-              {option}
-            </label>
-          </>
-        ))}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: 20,
-          border: "1px solid white",
-          margin: 20,
-          gap: "1rem",
-        }}
-      >
-        {catOptions.map((option) => (
-          <>
-            <label>
+              <label
+                htmlFor="videoInput"
+                className="videoInput"
+                onDragEnter={handleDrag}
+              >
+                <div>
+                  <p>Drag and drop your file here or</p>
+                  <button className="uploadButton">Upload a file</button>
+                </div>
+              </label>
+              {dragActive && (
+                <div
+                  id="dragOverlay"
+                  onDragEnter={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDragOver={handleDrag}
+                  onDrop={handleDrop}
+                ></div>
+              )}
+            </>
+          )}
+          <div className="uploadInfo">
+            <div>
+              <label htmlFor="title">Title</label>
               <input
-                type="checkbox"
-                value={option}
-                onChange={handleCatChange}
-                checked={selectedCats.includes(option)}
+                placeholder="Title"
+                name="title"
+                value={formData.title}
+                onChange={(e) => handleFormChange("title", e.target.value)}
+                required
               />
-              {option}
-            </label>
-          </>
-        ))}
+            </div>
+            <div>
+              <label htmlFor="categories">Category</label>
+              {categories ? (
+                <select
+                  name="categories"
+                  onChange={(e) => handleFormChange("category", e.target.value)}
+                  required
+                >
+                  <option value="">---Choose Category---</option>
+                  {categories.map((cat, i) => (
+                    <option key={i} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <p>Loading...</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="tags">Tags</label>
+              <ul className="tags">
+                {formData.tags.map((tag, i) => (
+                  <li key={i} className="tag">
+                    <p>#{tag}</p>
+                    <button type="button" onClick={(e) => removeTag(tag)}>
+                      x
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <input
+                placeholder="#Tags"
+                name="tags"
+                onKeyDown={(e) => {
+                  e.key === "Enter" && AddTag(e);
+                }}
+              />
+            </div>
+          </div>
+          <button type="submit" disabled={uploading}>
+            UPLOAD CLIP
+          </button>
+        </form>
       </div>
-      <p>Selected options: {selectedTags.join(", ")}</p>
-      <button onClick={handleUploadClip}>UPLOAD CLIP</button>
-    </>
+    </main>
   );
 };
 
