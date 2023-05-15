@@ -44,7 +44,6 @@ const ClipUpload = () => {
   };
 
   const removeTag = (tag) => {
-    console.log("test");
     const newFormData = { ...formData };
     const filterdTags = formData.tags.filter((e) => e !== tag);
     newFormData.tags = filterdTags;
@@ -60,26 +59,24 @@ const ClipUpload = () => {
   const uploadClip = async (clip) => {
     try {
       const docRef = await addDoc(collection(db, "clips"), clip);
-      console.log("Note uploaded with ID:", docRef.id);
     } catch (error) {
-      console.error("Error uploading note:", error);
+      console.error("Error uploading clip:", error);
     }
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData);
     e.preventDefault();
-    // const videoURL = await uploadVideo(videoFile);
-    // const clipData = {
-    //   Owner: auth.currentUser.uid,
-    //   Title: formData.title,
-    //   Video: videoURL,
-    //   // Tags: formData.tags,
-    //   Categories: formData.category,
-    //   timeCreated: new Date(),
-    // };
+    const videoURL = await uploadVideo(videoFile);
+    const clipData = {
+      Owner: auth.currentUser.uid,
+      Title: formData.title,
+      Video: videoURL,
+      Tags: formData.tags,
+      Categories: formData.category,
+      timeCreated: new Date(),
+    };
 
-    // uploadClip(clipData);
+    uploadClip(clipData);
   };
 
   const handleDrag = (e) => {
