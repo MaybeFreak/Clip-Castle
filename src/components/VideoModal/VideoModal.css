@@ -1,0 +1,46 @@
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoModalContent {
+  background: #1e1e1e;
+  max-height: 80%;
+  max-width: 80%;
+
+  border: 2px solid var(--color-red);
+  border-radius: 5px;
+}
+
+.videoModalContent .videoContainer video {
+  width: 100%;
+  object-fit: scale-down;
+
+  border-radius: 4px 4px 0px 0px;
+}
+
+.videoModalContent .clipInfo {
+  padding: 0.5rem 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.videoModalContent .clipInfo .tags {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.videoModalContent .clipInfo .tags .tag {
+  padding: 0.8rem 0.8rem;
+}
