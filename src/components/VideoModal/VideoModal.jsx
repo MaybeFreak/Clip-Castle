@@ -1,8 +1,6 @@
 import { createPortal } from "react-dom";
 import "./VideoModal.css";
 
-// TODO: https://codesandbox.io/s/magical-christian-qxtdm?from-embed=&file=/src/Modal/Modal.css:370-480
-
 function VideoModal({ onClose, clip, userInfo, timeAgo }) {
   return createPortal(
     <div className="modal" onClick={onClose}>
