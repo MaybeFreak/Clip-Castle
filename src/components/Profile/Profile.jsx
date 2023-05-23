@@ -1,13 +1,15 @@
 import { collection, getDocs, limit, query, where } from "@firebase/firestore";
 import { useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
-import { onAuthStateChanged } from "@firebase/auth";
 import ClipCard from "../ClipCard/ClipCard";
+import { useParams } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 function Profile() {
   const [clips, setClips] = useState(false);
+  const params = useParams();
 
-  const fetchOwnClips = async (user) => {
+  const fetchClips = async (user) => {
     const q = query(
       collection(db, "clips"),
       where("Owner", "==", user.uid),
@@ -25,9 +27,9 @@ function Profile() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      fetchOwnClips(user);
+      fetchClips(user);
     });
-  }, []);
+  }, [params]);
 
   return (
     <main>

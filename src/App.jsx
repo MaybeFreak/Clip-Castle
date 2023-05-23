@@ -10,6 +10,7 @@ import ClipUpload from "./components/ClipUpload/ClipUpload";
 import Profile from "./components/Profile/Profile";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import ProfileSetup from "./components/ProfileSetup/ProfileSetup";
+import UserPage from "./components/UserPage/UserPage";
 
 function App() {
   // Initialise the ANIMATE ON SCROLL library
@@ -59,6 +60,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/:id"
+          element={
+            <ProtectedRoute>
+              <UserPage />
             </ProtectedRoute>
           }
         />

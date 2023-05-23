@@ -64,12 +64,12 @@ function ClipCard({ clip }) {
             <h2>{clip.data.Title}</h2>
             <div className="whenWho">
               {userInfo && (
-                <NavLink className={"toRed"} to={"/profile"}>
+                <NavLink className={"toRed"} to={`/user/${clip.data.Owner}`}>
                   {userInfo.username}
                 </NavLink>
               )}
               {userInfo === undefined && (
-                <NavLink className={"toRed"} to={"/profile"}>
+                <NavLink className={"toRed"} to={`/user/${clip.data.Owner}`}>
                   {clip.data.Owner}
                 </NavLink>
               )}
