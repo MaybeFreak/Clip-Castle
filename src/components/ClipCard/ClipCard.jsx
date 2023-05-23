@@ -64,10 +64,14 @@ function ClipCard({ clip }) {
             <h2>{clip.data.Title}</h2>
             <div className="whenWho">
               {userInfo && (
-                <NavLink to={"/profile"}>{userInfo.username}</NavLink>
+                <NavLink className={"toRed"} to={"/profile"}>
+                  {userInfo.username}
+                </NavLink>
               )}
               {userInfo === undefined && (
-                <NavLink to={"/profile"}>{clip.data.Owner}</NavLink>
+                <NavLink className={"toRed"} to={"/profile"}>
+                  {clip.data.Owner}
+                </NavLink>
               )}
               <p>•</p>
               <p className="timeago">
@@ -77,7 +81,7 @@ function ClipCard({ clip }) {
             <ul className="clipTags">
               {clip.data.Tags.map((tag, i) => (
                 <li key={i} className="tag">
-                  #{tag}
+                  <NavLink className={"tag"}>#{tag}</NavLink>
                 </li>
               ))}
             </ul>
