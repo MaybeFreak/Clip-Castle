@@ -1,0 +1,10 @@
+button.dark {
+  background-color: var(--color-black);
+  border-radius: 5px;
+  color: var(--color-white);
+  transition: all 0.3s;
+}
+
+button.dark:hover {
+  color: var(--color-red);
+}

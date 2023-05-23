@@ -1,0 +1,31 @@
+a.lighten {
+  text-decoration: none;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+
+a.lighten:hover {
+  background-color: var(--color-white-25);
+}
+
+a.none {
+  text-decoration: none;
+}
+
+a.toRed {
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+a.toRed:hover {
+  color: var(--color-red);
+}
+
+a.tag {
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+a.tag:hover {
+  color: var(--color-red);
+}

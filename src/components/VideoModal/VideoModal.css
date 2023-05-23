@@ -8,19 +8,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 99;
 }
 
 .videoModalContent {
   background: #1e1e1e;
-  max-height: 90%;
-  max-width: 70%;
-
-  border: 2px solid var(--color-red);
-  border-radius: 5px;
 }
 
 .videoModalContent .videoContainer video {
-  width: 100%;
+  max-width: 80vw;
   object-fit: scale-down;
 
   border-radius: 4px 4px 0px 0px;

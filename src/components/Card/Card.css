@@ -1,0 +1,29 @@
+.gradient {
+  position: relative;
+  padding: 5px;
+  background-image: linear-gradient(135deg, var(--color-red), 50%, orange);
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.gradient::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(135deg, var(--color-red), 15%, orange);
+  border-radius: 5px;
+  z-index: -1;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+.gradient:hover::before {
+  opacity: 1;
+}
+
+.content {
+  background-color: #1e1e1e;
+  border-radius: 5px;
+}

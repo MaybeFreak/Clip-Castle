@@ -21,11 +21,6 @@ header h1 {
   font-size: 50px;
 }
 
-header a {
-  text-decoration: none;
-  color: var(--color-white);
-}
-
 header nav {
   margin-left: auto;
   display: flex;
@@ -36,12 +31,5 @@ header nav {
 header nav a {
   font-size: 24px;
   padding: 0.2rem 0.5rem;
-  color: var(--color-white);
-  background: var(--color-red);
-  border-radius: 15px;
   transition: all 0.3s;
-}
-
-header nav a:hover {
-  background-color: var(--color-white-25);
 }

@@ -25,7 +25,7 @@ function Header({ children }) {
   return (
     <>
       <header>
-        <NavLink id="headerLogo" to={"/"}>
+        <NavLink className={"none"} id="headerLogo" to={"/"}>
           <img
             className="headerLogo"
             src="\src\assets\Clip-Castle-favicon.png"
@@ -34,19 +34,33 @@ function Header({ children }) {
           <h1>Clip Castle</h1>
         </NavLink>
         <nav>
-          <NavLink to={"/clips"}>clips</NavLink>
-          <NavLink to={"/clips/upload"}>Upload</NavLink>
+          <NavLink className={"lighten"} to={"/clips"}>
+            clips
+          </NavLink>
+          <NavLink className={"lighten"} to={"/clips/upload"}>
+            Upload
+          </NavLink>
           {isLoggedIn ? (
             <>
-              <NavLink to={"/profile"}>Profile</NavLink>
-              <button onClick={handleSignOut}>Sign Out</button>
+              <NavLink className={"lighten"} to={"/profile"}>
+                Profile
+              </NavLink>
+              <button className="dark" onClick={handleSignOut}>
+                Sign Out
+              </button>
             </>
           ) : (
             <>
-              <NavLink to={"/login"} state={{ from: location }}>
+              <NavLink
+                className={"lighten"}
+                to={"/login"}
+                state={{ from: location }}
+              >
                 Login
               </NavLink>
-              <NavLink to={"/register"}>Sign up</NavLink>
+              <NavLink className={"lighten"} to={"/register"}>
+                Sign up
+              </NavLink>
             </>
           )}
         </nav>

@@ -1,4 +1,6 @@
 @import "./styles/_globals.css";
+@import "./styles/_buttons.css";
+@import "./styles/_links.css";
 @font-face {
   font-family: "Harman-Sans";
   src: url("./assets/Fonts/Harman-Sans.otf") format("opentype");
@@ -10,6 +12,10 @@
   box-sizing: content-box;
   padding: 0;
   margin: 0;
+}
+
+a {
+  color: var(--color-white);
 }
 
 body {
