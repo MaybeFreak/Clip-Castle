@@ -1,11 +1,13 @@
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./ClipCard.css";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import VideoModal from "../VideoModal/VideoModal";
 
 function ClipCard({ clip }) {
   const [userInfo, setUserInfo] = useState(null);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     fetchUserInfo();
@@ -51,33 +53,45 @@ function ClipCard({ clip }) {
   };
 
   return (
-    <div className="clipCard">
-      <div className="videoContainer">
-        <video src={clip.data.Video} controls />
-      </div>
-      <div className="clipInfo">
-        <h2>{clip.data.Title}</h2>
-        <div className="whenWho">
-          {userInfo && <NavLink to={"/profile"}>{userInfo.username}</NavLink>}
-          {userInfo === undefined && (
-            <NavLink to={"/profile"}>{clip.data.Owner}</NavLink>
-          )}
-          <p>•</p>
-          <p className="timeago">{getTimeDifference(clip.data.timeCreated)}</p>
+    <>
+      <div className="clipCard">
+        <div className="videoContainer">
+          <video src={clip.data.Video} onClick={() => setShow(true)} />
         </div>
-        <ul className="clipTags">
-          {clip.data.Tags.map((tag, i) => (
-            <li key={i} className="tag">
-              #{tag}
-            </li>
-          ))}
-        </ul>
+        <div className="clipInfo">
+          <h2>{clip.data.Title}</h2>
+          <div className="whenWho">
+            {userInfo && <NavLink to={"/profile"}>{userInfo.username}</NavLink>}
+            {userInfo === undefined && (
+              <NavLink to={"/profile"}>{clip.data.Owner}</NavLink>
+            )}
+            <p>•</p>
+            <p className="timeago">
+              {getTimeDifference(clip.data.timeCreated)}
+            </p>
+          </div>
+          <ul className="clipTags">
+            {clip.data.Tags.map((tag, i) => (
+              <li key={i} className="tag">
+                #{tag}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="clipCardButtons">
+          <p>Like</p>
+          <p>Share</p>
+        </div>
       </div>
-      <div className="clipCardButtons">
-        <p>Like</p>
-        <p>Share</p>
-      </div>
-    </div>
+      {show && (
+        <VideoModal
+          onClose={() => setShow(false)}
+          clip={clip.data}
+          userInfo={userInfo}
+          timeAgo={getTimeDifference(clip.data.timeCreated)}
+        />
+      )}
+    </>
   );
 }
 
