@@ -8,8 +8,6 @@ main.Upload {
 
 .UploadCard {
   width: 800px;
-  border: solid 2px red;
-  border-radius: 8px;
 }
 
 .UploadCard form {

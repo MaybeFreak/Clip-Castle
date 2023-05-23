@@ -4,6 +4,7 @@ import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "./ClipUpload.css";
 import { useNavigate } from "react-router-dom";
+import Card from "../Card/Card.jsx";
 
 const ClipUpload = () => {
   const [videoFile, setVideoFile] = useState(null);
@@ -108,97 +109,101 @@ const ClipUpload = () => {
 
   return (
     <main className="Upload">
-      <div className="UploadCard">
-        <form onSubmit={handleSubmit}>
-          {videoFile ? (
-            <video controls src={URL.createObjectURL(videoFile)} />
-          ) : (
-            <>
-              <input
-                type="file"
-                className="hidden"
-                name="videoInput"
-                accept="video/*"
-                onChange={(e) => setVideoFile(e.target.files[0])}
-                required
-              />
-              <label
-                htmlFor="videoInput"
-                className="videoInput"
-                onDragEnter={handleDrag}
-              >
-                <div>
-                  <p>Drag and drop your file here or</p>
-                  <button className="uploadButton">Upload a file</button>
-                </div>
-              </label>
-              {dragActive && (
-                <div
-                  id="dragOverlay"
-                  onDragEnter={handleDrag}
-                  onDragLeave={handleDrag}
-                  onDragOver={handleDrag}
-                  onDrop={handleDrop}
-                ></div>
-              )}
-            </>
-          )}
-          <div className="uploadInfo">
-            <div>
-              <label htmlFor="title">Title</label>
-              <input
-                placeholder="Title"
-                name="title"
-                value={formData.title}
-                onChange={(e) => handleFormChange("title", e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="categories">Category</label>
-              {categories ? (
-                <select
-                  name="categories"
-                  onChange={(e) => handleFormChange("category", e.target.value)}
+      <Card>
+        <div className="UploadCard">
+          <form onSubmit={handleSubmit}>
+            {videoFile ? (
+              <video controls src={URL.createObjectURL(videoFile)} />
+            ) : (
+              <>
+                <input
+                  type="file"
+                  className="hidden"
+                  name="videoInput"
+                  accept="video/*"
+                  onChange={(e) => setVideoFile(e.target.files[0])}
                   required
+                />
+                <label
+                  htmlFor="videoInput"
+                  className="videoInput"
+                  onDragEnter={handleDrag}
                 >
-                  <option value="">---Choose Category---</option>
-                  {categories.map((cat, i) => (
-                    <option key={i} value={cat}>
-                      {cat}
-                    </option>
+                  <div>
+                    <p>Drag and drop your file here or</p>
+                    <button className="uploadButton">Upload a file</button>
+                  </div>
+                </label>
+                {dragActive && (
+                  <div
+                    id="dragOverlay"
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                  ></div>
+                )}
+              </>
+            )}
+            <div className="uploadInfo">
+              <div>
+                <label htmlFor="title">Title</label>
+                <input
+                  placeholder="Title"
+                  name="title"
+                  value={formData.title}
+                  onChange={(e) => handleFormChange("title", e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="categories">Category</label>
+                {categories ? (
+                  <select
+                    name="categories"
+                    onChange={(e) =>
+                      handleFormChange("category", e.target.value)
+                    }
+                    required
+                  >
+                    <option value="">---Choose Category---</option>
+                    {categories.map((cat, i) => (
+                      <option key={i} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="tags">Tags</label>
+                <ul className="tags">
+                  {formData.tags.map((tag, i) => (
+                    <li key={i} className="tag">
+                      <p>#{tag}</p>
+                      <button type="button" onClick={(e) => removeTag(tag)}>
+                        x
+                      </button>
+                    </li>
                   ))}
-                </select>
-              ) : (
-                <p>Loading...</p>
-              )}
+                </ul>
+                <input
+                  placeholder="#Tags"
+                  name="tags"
+                  onKeyDown={(e) => {
+                    e.key === "Enter" && AddTag(e);
+                  }}
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="tags">Tags</label>
-              <ul className="tags">
-                {formData.tags.map((tag, i) => (
-                  <li key={i} className="tag">
-                    <p>#{tag}</p>
-                    <button type="button" onClick={(e) => removeTag(tag)}>
-                      x
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <input
-                placeholder="#Tags"
-                name="tags"
-                onKeyDown={(e) => {
-                  e.key === "Enter" && AddTag(e);
-                }}
-              />
-            </div>
-          </div>
-          <button type="submit" disabled={uploading}>
-            UPLOAD CLIP
-          </button>
-        </form>
-      </div>
+            <button type="submit" disabled={uploading}>
+              UPLOAD CLIP
+            </button>
+          </form>
+        </div>
+      </Card>
     </main>
   );
 };
