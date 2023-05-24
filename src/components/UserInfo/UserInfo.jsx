@@ -17,7 +17,7 @@ function UserInfo({ userId }) {
     setUserInfo(querySnapshot);
   };
   return (
-    <>
+    <div>
       {userInfo && (
         <>
           <h2>User Info</h2>
@@ -29,7 +29,7 @@ function UserInfo({ userId }) {
           </Card>
         </>
       )}
-    </>
+    </div>
   );
 }
 

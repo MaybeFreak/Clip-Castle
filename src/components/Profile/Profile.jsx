@@ -1,3 +1,4 @@
+import "./Profile.css";
 import { collection, getDocs, limit, query, where } from "@firebase/firestore";
 import { useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
@@ -35,12 +36,15 @@ function Profile() {
   }, [params]);
 
   return (
-    <main>
-      <div>Your Profile</div>
-      <UserInfo userId={userId} />
-      <h2>Your Clips</h2>
-      <div>
-        {clips && clips.map((clip, i) => <ClipCard key={i} clip={clip} />)}
+    <main className="profile">
+      <div className="infoAndClips">
+        <UserInfo userId={userId} />
+        <div>
+          <h2>Clips</h2>
+          <div className="clips">
+            {clips && clips.map((clip, i) => <ClipCard key={i} clip={clip} />)}
+          </div>
+        </div>
       </div>
     </main>
   );
