@@ -57,14 +57,14 @@
 ### Setup firebase
 To have your own version of this project running locally we will have to do some setup for firebase. 
   1. Create your own firebase project at <a target="_blank" href="https://console.firebase.google.com">console.firebase.google.com<a>
-  2. Once you're done creating the project you should see a banner like the one below. 
+  2. Once you're done creating the project you should see a banner like the one below. <br/>
       <img height=250 src="https://cdn.discordapp.com/attachments/142745451207065600/1111587259196649542/image.png" />
   3. Select the web option to add a new web app to the project.
   4. Provide a name for the app and press register app.</br>
       <img src="https://cdn.discordapp.com/attachments/142745451207065600/1111587364108783667/image.png" />
-  5. Now you should see a quick guide on how to add the firebase SDK to your project. Take note of the firebaseConfig object, this holds all the info we need to connect to our newly created app. 
+  5. Now you should see a quick guide on how to add the firebase SDK to your project. Take note of the firebaseConfig object, this holds all the info we need to connect to our newly created app.<br/>
     <img height=800 src="https://cdn.discordapp.com/attachments/142745451207065600/1111586934687535135/image.png" />
-  6. Let's open the `example.env` file in the root of our project and set the values from the firebaseConfig to their corresponding variables in the `example.env` file. When we are done with this our `example.env` should looks something like this.
+  6. Let's open the `example.env` file in the root of our project and set the values from the firebaseConfig to their corresponding variables in the `example.env` file. When we are done with this our `example.env` should looks something like this.<br/>
     <img src="https://cdn.discordapp.com/attachments/142745451207065600/1111591126386880624/image.png" /> 
   7. **IMPORTANT:** Make sure to rename the `example.env` file to `.env` otherwise our code won't be able to find and read it.
   
