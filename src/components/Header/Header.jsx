@@ -6,6 +6,7 @@ import "./Header.css";
 
 function Header({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,6 +15,7 @@ function Header({ children }) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsLoggedIn(true);
+        setUserId(user.uid);
       }
     });
   }, [auth]);
@@ -42,7 +44,7 @@ function Header({ children }) {
           </NavLink>
           {isLoggedIn ? (
             <>
-              <NavLink className={"lighten"} to={"/profile"}>
+              <NavLink className={"lighten"} to={`/profile`}>
                 Profile
               </NavLink>
               <button className="dark" onClick={handleSignOut}>

@@ -1,0 +1,14 @@
+main.profile {
+  padding: 1rem 1rem 0;
+}
+
+.infoAndClips {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 400px 1fr;
+}
+
+.infoAndClips .clips {
+  display: flex;
+  gap: 1rem;
+}
