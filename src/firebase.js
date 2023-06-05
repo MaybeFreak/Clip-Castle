@@ -7,6 +7,9 @@ import { getStorage } from "firebase/storage";
 
 const {
   VITE_API_KEY,
+  VITE_AUTH_DOMAIN,
+  VITE_PROJECT_ID,
+  VITE_STORAGE_BUCKET,
   VITE_MESSAGE_SENDER_ID,
   VITE_APP_ID,
   VITE_MEASURMENT_ID,
@@ -14,9 +17,9 @@ const {
 
 const firebaseConfig = {
   apiKey: VITE_API_KEY,
-  authDomain: "clip-castle.firebaseapp.com",
-  projectId: "clip-castle",
-  storageBucket: "clip-castle.appspot.com",
+  authDomain: VITE_AUTH_DOMAIN,
+  projectId: VITE_PROJECT_ID,
+  storageBucket: VITE_STORAGE_BUCKET,
   messagingSenderId: VITE_MESSAGE_SENDER_ID,
   appId: VITE_APP_ID,
   measurementId: VITE_MEASURMENT_ID,
